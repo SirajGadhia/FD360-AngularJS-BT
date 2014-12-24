@@ -16,7 +16,6 @@ __ScreenShot:__
 
 
  >__Note:__
- 
  >*Data are static json array, changes will be lost on page refresh.*
  
 
