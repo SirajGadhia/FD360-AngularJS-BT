@@ -26,3 +26,5 @@ __YouTube:__
 
 
 __Siraj Gadhia (www.Siraj360.com)__
+![alt tag](https://yt3.ggpht.com/-NXR_RPbtSBU/AAAAAAAAAAI/AAAAAAAAAAA/qsMT6VMwojU/s88-c-k-no/photo.jpg)
+
