@@ -9,5 +9,6 @@ Online demo at www.Siraj360.com/FD360/
 ![alt tag](https://github.com/SirajGadhia/FD360-AngularJS-BT/blob/master/FD360Image.PNG)
 
 
-Note: Data are static json array, changes will be lost on page refresh.
+ >Note: Data are static json array, changes will be lost on page refresh.
+ 
 - Siraj Gadhia (www.Siraj360.com)
