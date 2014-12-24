@@ -6,7 +6,7 @@ A sample single page application (SPA) developed with AngularJS 1.3.8 and Bootst
 Online demo at www.Siraj360.com/FD360/
 --------------------------------------
 
-![alt tag](https://raw.github.com/username/projectname/branch/path/to/img.png)
+![alt tag](https://raw.github.com/FD360-AngularJS-BT/blob/master/FD360Image.PNG)
 
 
 Note: Data are static json array, changes will be lost on page refresh.
