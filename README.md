@@ -1,4 +1,6 @@
-![alt tag](https://yt3.ggpht.com/-NXR_RPbtSBU/AAAAAAAAAAI/AAAAAAAAAAA/qsMT6VMwojU/s88-c-k-no/photo.jpg) FD360-AngularJS-BT
+![alt tag](https://yt3.ggpht.com/-NXR_RPbtSBU/AAAAAAAAAAI/AAAAAAAAAAA/qsMT6VMwojU/s88-c-k-no/photo.jpg) 
+
+FD360-AngularJS-BT
 ==================
 
 A sample single page application (SPA) developed with AngularJS 1.3.8 and Bootstrap 3.3.1.
@@ -13,9 +15,9 @@ Decemeber 30, 2014.
 
 
 __ScreenShot:__
-![alt tag](https://github.com/SirajGadhia/FD360-AngularJS-BT/blob/master/FD360Image.PNG)
+![alt tag](https://github.com/SirajGadhia/FD360-AngularJS-BT/blob/master/FD360Image3.PNG)
 
-
+![alt tag](https://github.com/SirajGadhia/FD360-AngularJS-BT/blob/master/FD360Image2.PNG)
 
 
  >__Note:__
