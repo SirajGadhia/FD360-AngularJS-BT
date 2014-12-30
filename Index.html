@@ -1,10 +1,10 @@
-﻿<!doctype html>
+﻿<!doctype html >
+
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Angular JS and Bootstrap Sample Application</title>
-
 
     <!--<link href="css/bootstrap.min.css" rel="stylesheet" />-->
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet" />
@@ -24,140 +24,232 @@
 
         <div class="alert alert-warning alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            A sample single page application (SPA) developed with <strong>AngularJS 1.3.8</strong> and <strong>Bootstrap 3.3.1</strong>.<br />
-            <strong>Note:</strong> Data are static json array, changes will be lost on page refresh.<br />
-            - <strong>Siraj Gadhia</strong> (www.Siraj360.com)
+            <h4> A sample single page application (SPA) developed with <strong>AngularJS 1.3.8</strong> and <strong>Bootstrap 3.3.1</strong>.</h4>
+            <br />
+            &nbsp;&nbsp;<strong>Note:</strong>&nbsp;&nbsp;Data are static json array, changes will be lost on page refresh.<br />
+            &nbsp;&nbsp;<strong>Download:</strong>&nbsp;&nbsp;<a href="https://github.com/SirajGadhia/FD360-AngularJS-BT" target="_blank">GitHub.com/SirajGadhia/FD360-AngularJS-BT.</a><br />
+            &nbsp;&nbsp;<strong>YouTube Demo Video:</strong>&nbsp;&nbsp;<a href="https://www.youtube.com/my_videos?o=U" target="_blank">Siraj360 Demo Videos.</a><br />
+            &nbsp;&nbsp;<strong>Last update:</strong>&nbsp;&nbsp;30th December 2014.<br />
+
+            <br />- <strong>Siraj Gadhia</strong> (www.Siraj360.com).
 
         </div>
 
         <div ng-controller="EmployeeController">
 
+            <!--<div loading-indicator></div>-->
 
-            <div class="row" style="padding: 10px 0 10px 0;">
-                <div>
-                    <div class="col-xs-12 col-lg-8">
-                        <div class="input-group">
-                            <div class="input-group-btn search-panel">
-                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                                    <span id="search_concept">{{seach_all}}</span> <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a ng-click="seach_all ='Search all Employees'; is_all_completed = '';  is_all_pending = '' ">Search all Employees</a></li>
-                                    <li><a ng-click="seach_all ='Search who completed all courses'; is_all_completed = true; is_all_pending = ''">Search who completed all courses</a></li>
-                                    <li><a ng-click="seach_all ='Search whose all courses are pending';  is_all_pending = true ; is_all_completed = '' ">Search whose all courses are pending</a></li>
-                                </ul>
+
+            <div ng-show="is_finish_loading">
+                <div class="panel panel-info" ng-show="is_add">
+                    <div class="panel-heading">
+
+                        <form class="form-inline" name="formEmployee" novalidate>
+                            <div class=" form-group form-group-sm " ng-class="{ 'has-error':  formEmployee.employee_name.$invalid }">
+                                <label class="sr-only" for="employee_name">Name</label>
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
+                                    <input type="text" ng-model="new_employee.Name" class="form-control" required style="width: 240px;" id="employee_name" name="employee_name" placeholder="Employee Name">
+                                </div>
+                                <span ng-show="form_employee.$error">Error</span>
                             </div>
-                            <input type="text" class="form-control" ng-model="search.Name" name="x" placeholder="Search by employee name">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" ng-click="search.Name = ''" type="button"><span class="glyphicon glyphicon-remove"></span></button>
+                            <div class="form-group input-group-sm" ng-class="{ 'has-error':  formEmployee.hire_date.$invalid }">
+                                <label class="sr-only" for="hire_date">Hire Date</label>
+                                <div class="input-group input-group-sm">
+                                    <div class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></div>
+                                    <input type="date" class="form-control" ng-model="new_employee.HireDate" name="hire_date" required id="hire_date" placeholder="Hire Date">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-default btn-sm" ng-click="addNewEmployee()">Add</button>
+                            <button ng-click="addNewEmployeeCancel()" class="btn btn-default btn-sm">Cancel</button>
+                            <div class="form-group input-group-sm">
+                                <small ng-show="new_employee.ErrorMessage==''" class="text-info"><span class="glyphicon glyphicon-info-sign"></span> Select up to 4 course.</small>
+                                <small ng-show="new_employee.ErrorMessage!=''" class="text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> <strong>{{new_employee.ErrorMessage}}</strong></small>
+                            </div>
+                            <span class="badge pull-right">
+                                <span class="badge pull-right">
+                                    {{(courses | filter:{isSelect: true}).length}} / 4
+                                </span>
                             </span>
+                        </form>
+                    </div>
+
+                    <table class="table table-hover table-condensed table-bordered table-responsive">
+                        <thead>
+                            <tr class="warning">
+                                <th align="center" class="hidden-xs">
+                                </th>
+                                <th ng-sort360 order="'isSelect'" by="new_employee.order" reverse="new_employee.reverse" style="cursor:pointer;">Status</th>
+                                <th ng-sort360 order="'Code'" by="new_employee.order" reverse="new_employee.reverse" style="cursor:pointer;">Course Code</th>
+                                <th ng-sort360 order="'Name'" by="new_employee.order" reverse="new_employee.reverse" class="hidden-sm hidden-xs" style="cursor:pointer;">Course Name</th>
+                                <th align="center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="Course in courses | orderBy:new_employee.order:new_employee.reverse" ng-class="Course.isSelect | courserowclass">
+
+                                <td align="center" class="hidden-xs">
+                                    <span class="badge">
+                                        {{$index+1}}
+                                    </span>
+                                </td>
+                                <td align="center">
+                                    <span ng-show="Course.isSelect" class="glyphicon glyphicon-ok"></span>
+                                    <span ng-hide="Course.isSelect" class="glyphicon glyphicon-remove"></span>
+                                </td>
+                                <td align="center">
+                                    <b>
+                                        {{Course.Code}}
+                                    </b>
+                                </td>
+                                <td class="hidden-sm hidden-xs">
+                                    {{Course.Name}}
+                                </td>
+                                <td>
+                                    <button ng-show="Course.isSelect" ng-click="changeSelect()" class="btn btn-xs btn-warning">Remove</button>
+                                    <button ng-show="new_employee.isAllowCourse && !Course.isSelect" ng-click="changeSelect()" class="btn btn-xs btn-success">Add</button>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                        <tbody ng-if="courses.length == 0" class="text-center">
+                            <tr class="danger">
+                                <td colspan="5">
+                                    <strong>No results found.</strong>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+
+
+                <div class="row" style="padding: 10px 0 10px 0;">
+                    <div>
+                        <div class="col-xs-12">
+                            <div class="input-group">
+                                <div class="input-group-btn search-panel">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                        <span id="search_concept">{{seach_all}}</span> <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a ng-click="seach_all ='Search all Employees'; is_all_completed = '';  is_all_pending = '' ">Search all Employees</a></li>
+                                        <li><a ng-click="seach_all ='Search who completed all courses'; is_all_completed = true; is_all_pending = ''">Search who completed all courses</a></li>
+                                        <li><a ng-click="seach_all ='Search whose all courses are pending';  is_all_pending = true ; is_all_completed = '' ">Search whose all courses are pending</a></li>
+                                    </ul>
+                                </div>
+
+                                <input type="text" class="form-control" ng-model="search.Name" name="x" placeholder="Search by employee name">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="search.Name = ''" type="button"><span class="glyphicon glyphicon-remove"></span></button>
+                                    <button class="btn btn-default hidden-sm hidden-xs" ng-click="is_add = !is_add" type="button"><span class="glyphicon glyphicon-user"></span>&nbsp;Add Employee</button>
+                                    <!--<button class="btn btn-default" ng-click="search.Name = ''" type="button"><span class="glyphicon glyphicon glyphicon-list-alt"></span>&nbsp;Add Course</button>-->
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
 
-            <div ng-repeat="employee in employees | filter:{isAllPending: is_all_pending} | filter:{isAllCompleted: is_all_completed} | filter:search:stric">
+                <div ng-repeat="employee in employees | filter:{isAllPending: is_all_pending} | filter:{isAllCompleted: is_all_completed} | filter:search:stric">
 
-                <div ng-class="employee.EmployeeCourses.length | employeeheaderclass: (employee.EmployeeCourses | filter:{isComplete: true}).length">
-                    <!-- Default panel contents -->
-                    <div class="panel-heading">
-                        <button ng-hide="employee.isNotShowCourses" ng-click="toggleShowCourses()" class="btn btn-xs btn-default">
-                            <span class="glyphicon glyphicon-arrow-up"></span>
-                        </button>
-                        <button ng-show="employee.isNotShowCourses" ng-click="toggleShowCourses()" class="btn btn-xs btn-default">
-                            <span class="glyphicon glyphicon-arrow-down"></span>
-                        </button>
-                        &nbsp;
-                        <span class="glyphicon glyphicon-user"></span> &nbsp;
-                        <b>{{employee.Name}}</b>&nbsp; <!--{{employee.isAllPending}}- {{employee.isAllCompleted}}-->
-                        <span class="hidden-sm hidden-xs">
-                            <small> ({{employee.HireDate | date: shortDate}})</small>
-                        </span>
-                        <span class="badge pull-right">
-                            {{(employee.EmployeeCourses | filter:{isComplete: true}).length}} / {{employee.EmployeeCourses.length}}
-                        </span>
-                        <!--{{employee.isNotShowCourses}}-->
-                        <!--<span class="badge">{{$index+1}}</span>-->
-                        <!---{{employee.isNotShowCourses}}- <a ng-click="toggleShowCourses()">toggle</a>-->
-                        <!--- {{employee.course_count}}-->
-                        <!--{{(emp in employee.EmployeeCourses | filter:{isComplete: true}).length}}-->
-                        <!--{{employee.EmployeeID}} --->
-                        <!--&nbsp;@"Edit", New With {.id = Model.EmployeeID}, New With {.class = "btn btn-xs btn-primary"})-->
-                        <!--<span class="badge  pull-right hidden-xs">@_Sucess / @Model.EmployeeCourses.Count</span>-->
-                        <!--{{employee.order}}-->
+                    <div ng-class="employee.EmployeeCourses.length | employeeheaderclass: (employee.EmployeeCourses | filter:{isComplete: true}).length">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading">
+                            <button ng-hide="employee.isNotShowCourses" ng-click="toggleShowCourses()" class="btn btn-xs btn-default">
+                                <span class="glyphicon glyphicon-arrow-up"></span>
+                            </button>
+                            <button ng-show="employee.isNotShowCourses" ng-click="toggleShowCourses()" class="btn btn-xs btn-default">
+                                <span class="glyphicon glyphicon-arrow-down"></span>
+                            </button>
+                            &nbsp;
+                            <span class="glyphicon glyphicon-user"></span> &nbsp;
+                            <b>{{employee.Name}}</b>&nbsp; <!--{{employee.isAllPending}}- {{employee.isAllCompleted}}-->
+                            <span class="
+                            <span class=" hidden-sm hidden-xs">                            
+                                <small> ({{employee.HireDate | date: shortDate}})</small>
+                            </span>
+                            <div class="pull-right">
+                                <span class="badge">
+                                    {{(employee.EmployeeCourses | filter:{isComplete: true}).length}} / {{employee.EmployeeCourses.length}}
+                                </span>   &nbsp;
+                                <button ng-click="remove()" class="btn btn-xs btn-danger">
+                                    <span class="glyphicon glyphicon-remove "></span>
+                                </button>
+                            </div>
+
+                        </div>
+                        <!-- Table -->
+                        <div ng-hide="employee.isNotShowCourses" class="table-responsive">
+                            <table class="table table-hover table-condensed table-bordered table-responsive">
+                                <thead>
+                                    <tr class="warning">
+                                        <th align="center" class="hidden-xs">
+                                        </th>
+                                        <th ng-sort360 order="'isComplete'" by="employee.order" reverse="employee.reverse" style="cursor:pointer;">Status</th>
+                                        <th ng-sort360 order="'Code'" by="employee.order" reverse="employee.reverse" style="cursor:pointer;">Course Code</th>
+                                        <th ng-sort360 order="'Name'" by="employee.order" reverse="employee.reverse" class="hidden-sm hidden-xs" style="cursor:pointer;">Course Name</th>
+                                        <th align="center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="Course in employee.EmployeeCourses | orderBy:employee.order:employee.reverse" ng-class="Course.isComplete | courserowclass">
+                                        <td align="center" class="hidden-xs">
+                                            <span class="badge">
+                                                {{$index+1}}
+                                            </span>
+                                        </td>
+                                        <td align="center">
+                                            <span ng-show="Course.isComplete" class="glyphicon glyphicon-ok"></span>
+                                            <span ng-hide="Course.isComplete" class="glyphicon glyphicon-remove"></span>
+                                        </td>
+                                        <td align="center">
+                                            <b>
+                                                {{Course.Code}}
+                                            </b>
+                                        </td>
+                                        <td class="hidden-sm hidden-xs">
+                                            {{Course.Name}}
+                                        </td>
+                                        <td>
+                                            <button ng-show="Course.isComplete" ng-click="changeComplete()" class="btn btn-xs btn-default"><span class="hidden-xs">mark </span>pending</button>
+                                            <button ng-hide="Course.isComplete" ng-click="changeComplete()" class="btn btn-xs btn-success"><span class="hidden-xs">mark </span>complete</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                                <tbody ng-if="employee.EmployeeCourses.length == 0" class="text-center">
+                                    <tr class="danger">
+                                        <td colspan="5">
+                                            <strong>No results found.</strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+                            </table>
+
+                        </div>
                     </div>
-                    <!-- Table -->
-                    <div ng-hide="employee.isNotShowCourses" class="table-responsive">
-                        <table class="table table-hover table-condensed table-bordered table-responsive">
-                            <thead>
-                                <tr class="warning">
 
-                                    <th align="center" class="hidden-xs">
 
-                                    </th>
-                                    <th ng-sort360 order="'isComplete'" by="employee.order" reverse="employee.reverse" style="cursor:pointer;">Status</th>
-                                    <th ng-sort360 order="'Code'" by="employee.order" reverse="employee.reverse" style="cursor:pointer;">Course Code</th>
-                                    <th ng-sort360 order="'Name'" by="employee.order" reverse="employee.reverse" class="hidden-sm hidden-xs" style="cursor:pointer;">Course Name</th>
-                                    <th align="center">Action</th>
-
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr ng-repeat="Course in employee.EmployeeCourses | orderBy:employee.order:employee.reverse" ng-class="Course.isComplete | courserowclass">
-
-                                    <td align="center" class="hidden-xs">
-                                        <span class="badge">
-                                            {{$index+1}}
-                                        </span>
-                                    </td>
-                                    <td align="center">
-                                        <span ng-show="Course.isComplete" class="glyphicon glyphicon-ok"></span>
-                                        <span ng-hide="Course.isComplete" class="glyphicon glyphicon-remove"></span>
-                                    </td>
-                                    <td align="center">
-                                        <b>
-                                            {{Course.Code}}
-                                        </b>
-                                    </td>
-                                    <td class="hidden-sm hidden-xs">
-                                        {{Course.Name}}
-
-                                    </td>
-                                    <td>
-                                        <button ng-show="Course.isComplete" ng-click="changeComplete()" class="btn btn-xs btn-default"><span class="hidden-xs">mark </span>pending</button>
-                                        <button ng-hide="Course.isComplete" ng-click="changeComplete()" class="btn btn-xs btn-success"><span class="hidden-xs">mark </span>complete</button>
-
-                                    </td>
-                                </tr>
-                            </tbody>
-
-                            <tbody ng-if="employee.EmployeeCourses.length == 0" class="text-center">
-                                <tr class="danger">
-                                    <td colspan="5">
-                                        <strong>No results found.</strong>
-                                    </td>
-                                </tr>
-                            </tbody>
-
-                        </table>
-
-                    </div>
                 </div>
 
 
             </div>
+
 
 
 
         </div>
-       
-        
-        
-        
-        
-        
-         <br /><br />
+
+
+
+
+
+
+        <br /><br />
         <hr />
 
 
@@ -170,7 +262,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>
-   
+
     <!--<script src="script/jquery-2.1.1.min.js"></script>
     <script src="script/bootstrap.min.js"></script>
     <script src="script/angular.min.js"></script>-->

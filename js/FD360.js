@@ -1,5 +1,5 @@
 ﻿
-debugger;
+//debugger;
 
 var Directive360 = angular.module('Directive360', []);
 
@@ -30,6 +30,22 @@ Directive360.directive("ngSort360", function () {
     }
 });
 
+Directive360.directive("loadingIndicator", function () {
+    return {
+        restrict: "A",
+        template: "<div style='padding:40px'><div class='alert alert-warning' role='alert'><h1><strong>Loading!</strong></h1><div class='progress'><div class='progress-bar progress-bar-warning progress-bar-striped' role='progressbar' aria-valuenow='100' aria-valuemin='0' aria-valuemax='100' style='width: 100%'><span class='sr-only'></span></div></div></div></div>",
+        link: function (scope, element, attrs) {
+            scope.$on("loading-started", function (e) {
+                element.css({ "display": "" });
+            });
+
+            scope.$on("loading-complete", function (e) {
+                element.css({ "display": "none" });
+            });
+
+        }
+    };
+});
 
 var Filter360 = angular.module('Filter360', []);
 
