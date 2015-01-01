@@ -29,7 +29,7 @@
             &nbsp;&nbsp;<strong>Note:</strong>&nbsp;&nbsp;Data are static json array, changes will be lost on page refresh.<br />
             &nbsp;&nbsp;<strong>Download:</strong>&nbsp;&nbsp;<a href="https://github.com/SirajGadhia/FD360-AngularJS-BT" target="_blank">GitHub.com/SirajGadhia/FD360-AngularJS-BT.</a><br />
             &nbsp;&nbsp;<strong>YouTube Demo Video:</strong>&nbsp;&nbsp;<a href="https://www.youtube.com/my_videos?o=U" target="_blank">Siraj360 Demo Videos.</a><br />
-            &nbsp;&nbsp;<strong>Last update:</strong>&nbsp;&nbsp;30th December 2014.<br />
+            &nbsp;&nbsp;<strong>Last update:</strong>&nbsp;&nbsp;1st January 2015.<br />
 
             <br />- <strong>Siraj Gadhia</strong> (www.Siraj360.com).
 
@@ -66,11 +66,18 @@
                                 <small ng-show="new_employee.ErrorMessage==''" class="text-info"><span class="glyphicon glyphicon-info-sign"></span> Select up to 4 course.</small>
                                 <small ng-show="new_employee.ErrorMessage!=''" class="text-danger"><span class="glyphicon glyphicon-exclamation-sign"></span> <strong>{{new_employee.ErrorMessage}}</strong></small>
                             </div>
-                            <span class="badge pull-right">
-                                <span class="badge pull-right">
+                            <span class="pull-right">
+                                <span class="badge">
                                     {{(courses | filter:{isSelect: true}).length}} / 4
                                 </span>
+                                <button ng-click="is_add=false" class="btn btn-xs btn-danger">
+                                    <span class="glyphicon glyphicon-remove "></span>
+                                </button>
                             </span>
+
+
+
+
                         </form>
                     </div>
 
@@ -175,7 +182,7 @@
                                 <span class="badge">
                                     {{(employee.EmployeeCourses | filter:{isComplete: true}).length}} / {{employee.EmployeeCourses.length}}
                                 </span>   &nbsp;
-                                <button ng-click="remove()" class="btn btn-xs btn-danger">
+                                <button ng-click="employee.isToDelete = !employee.isToDelete" class="btn btn-xs btn-danger">
                                     <span class="glyphicon glyphicon-remove "></span>
                                 </button>
                             </div>
@@ -183,6 +190,18 @@
                         </div>
                         <!-- Table -->
                         <div ng-hide="employee.isNotShowCourses" class="table-responsive">
+                            <div ng-show="employee.isToDelete" class="alert alert-danger alert-dismissible" role="alert">
+                                <button type="button" ng-click="employee.isToDelete = !employee.isToDelete" class="close" ><span aria-hidden="true">&times;</span></button>
+                                <strong>Warning:</strong>&nbsp;&nbsp;Are you sure to delete the employee - <b>{{employee.Name}}</b>
+                                &nbsp;&nbsp;<button ng-click="remove()" class="btn btn-sm btn-danger">
+                                                <strong> <span class="glyphicon glyphicon-ok ">&nbsp;Yes</span></strong> 
+                                </button>
+                                &nbsp;&nbsp;<button ng-click="employee.isToDelete = !employee.isToDelete" class="btn btn-sm btn-default">
+                                    <strong><span class="glyphicon glyphicon-remove ">&nbsp;No</span></strong>
+                                </button>
+                            </div>
+
+
                             <table class="table table-hover table-condensed table-bordered table-responsive">
                                 <thead>
                                     <tr class="warning">

@@ -149,7 +149,8 @@ function ($scope) {
        
             function getEmployees() {
                 var employees = $scope.employeesData;
-                      for (var i = 0; i < employees.length; i++) {
+                for (var i = 0; i < employees.length; i++) {
+                          employees[i].isToDelete = false;
                           employees[i].isAllPending = true;
                           employees[i].isAllCompleted = true;
                           employees[i].order = 'Code';
