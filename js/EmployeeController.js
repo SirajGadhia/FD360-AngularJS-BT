@@ -1,6 +1,11 @@
 ﻿
-FD360.controller('EmployeeController', ['$scope', 
-function ($scope) {
+
+(function () { 
+
+    angular.module('FD360').controller('EmployeeController', ['$scope', EmployeeController]);
+      
+    function EmployeeController($scope)
+    {
     //debugger;
     $scope.finish_count = 0;
     $scope.is_finish_loading = false;
@@ -1156,8 +1161,11 @@ function ($scope) {
 
 
             init();
+
             $scope.is_finish_loading = true
 
 
        
-        }]);
+        };
+
+})();
