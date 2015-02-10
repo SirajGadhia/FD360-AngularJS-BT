@@ -1,6 +1,6 @@
 ![alt tag](https://yt3.ggpht.com/-NXR_RPbtSBU/AAAAAAAAAAI/AAAAAAAAAAA/qsMT6VMwojU/s88-c-k-no/photo.jpg) 
 
-FD360-AngularJS-BT
+FD360-AngularJS-Bootstrap
 ==================
 
 A sample single page application (SPA) developed with AngularJS 1.3.8 and Bootstrap 3.3.1.
